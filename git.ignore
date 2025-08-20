@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Website Code Scanner</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .result {
+            margin-top: 20px;
+        }
+        .checkmark {
+            color: green;
+        }
+        .cross {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <h1>Website Code Scanner</h1>
+    <form id="scannerForm">
+        <label for="websites">Enter websites (separated by spaces):</label><br>
+        <input type="text" id="websites" name="websites" required>
+        <button type="submit">Scan</button>
+    </form>
+    <div class="result" id="result"></div>
+
+    <script>
+        document.getElementById('scannerForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const websites = document.getElementById('websites').value.split(' ');
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = '';
+
+            websites.forEach(website => {
+                fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(website)}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        const codeSnippet = '<form action="https://filter.nebo.edu/cgi-bin/blockpage/blockpage.cgi" method="GET">';
+                        const checkMark = data.contents.includes(codeSnippet) ? '✔️' : '❌';
+                        const className = data.contents.includes(codeSnippet) ? 'checkmark' : 'cross';
+                        resultDiv.innerHTML += `<p>${website}: <span class="${className}">${checkMark}</span></p>`;
+                    })
+                    .catch(error => {
+                        resultDiv.innerHTML += `<p>${website}: <span class="cross">Error fetching</span></p>`;
+                    });
+            });
+        });
+    </script>
+</body>
+</html>
