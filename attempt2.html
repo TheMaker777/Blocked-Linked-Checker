@@ -1,0 +1,36 @@
+# HTML Search for Specific Words
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Website Search</title>
+</head>
+<body>
+    <h1>Search for Specific Words in Website Source</h1>
+    <form id="searchForm">
+        <label for="websiteUrl">Enter Website URL:</label>
+        <input type="text" id="websiteUrl" name="websiteUrl" required>
+        <button type="submit">Search</button>
+    </form>
+    <div id="result"></div>
+
+    <script>
+        document.getElementById('searchForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const url = document.getElementById('websiteUrl').value;
+            fetch(url)
+                .then(response => response.text())
+                .then(data => {
+                    const searchTerm = '<input type="Hidden" name="CAT" value="Nebo-Block-All (Custom)">';
+                    const found = data.includes(searchTerm);
+                    document.getElementById('result').innerText = found ? 'Term found!' : 'Term not found.';
+                })
+                .catch(error => {
+                    document.getElementById('result').innerText = 'Error fetching the URL.';
+                });
+        });
+    </script>
+</body>
+</html>
