@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Website Search Tool</title>
+    <script>
+        async function checkWebsites() {
+            const input = document.getElementById('websites').value;
+            const websites = input.split(' ').map(site => site.startsWith('http') ? site : 'https://' + site);
+            const results = document.getElementById('results');
+            results.innerHTML = '';
+
+            for (const site of websites) {
+                try {
+                    const response = await fetch(site);
+                    const text = await response.text();
+                    if (text.includes('<input type="Hidden" name="CAT" value="Nebo-Block-All (Custom)">')) {
+                        results.innerHTML += `<p>Blocked: ${site}</p>`;
+                    } else {
+                        results.innerHTML += `<p>Unblocked: ${site}</p>`;
+                    }
+                } catch (error) {
+                    results.innerHTML += `<p>Error accessing: ${site}</p>`;
+                }
+            }
+        }
+    </script>
+</head>
+<body>
+    <h1>Website Search Tool</h1>
+    <input type="text" id="websites" placeholder="Enter websites separated by space">
+    <button onclick="checkWebsites()">Check Websites</button>
+    <div id="results"></div>
+</body>
+</html>
