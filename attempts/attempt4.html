@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Website Search</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h1>Website Search Tool</h1>
+    <label>
+        <input type="checkbox" id="addHttps"> Add https:// to websites
+    </label>
+    <br><br>
+    <input type="text" id="websites" placeholder="Enter websites separated by space">
+    <button onclick="checkWebsites()">Search</button>
+    <div id="error" style="color: red;"></div>
+    <br>
+    <table>
+        <thead>
+            <tr>
+                <th>Blocked</th>
+                <th>Unblocked</th>
+            </tr>
+        </thead>
+        <tbody id="results">
+        </tbody>
+    </table>
+
+    <script>
+        async function checkWebsites() {
+            const input = document.getElementById('websites').value;
+            const addHttps = document.getElementById('addHttps').checked;
+            const websites = input.split(' ');
+            const blocked = [];
+            const unblocked = [];
+            const errorDiv = document.getElementById('error');
+            errorDiv.innerHTML = '';
+
+            for (const site of websites) {
+                const url = addHttps && !site.startsWith('https://') ? 'https://' + site : site;
+                try {
+                    const response = await fetch(url);
+                    const text = await response.text();
+                    if (text.includes('<input type="Hidden" name="CAT"')) {
+                        blocked.push(site);
+                    } else {
+                        unblocked.push(site);
+                    }
+                } catch (error) {
+                    errorDiv.innerHTML += `Error with: ${site}<br>`;
+                    unblocked.push(site.startsWith('https://') ? site : site);
+                }
+            }
+
+            const results = document.getElementById('results');
+            results.innerHTML = '';
+            results.innerHTML += `<tr><td>${blocked.join('<br>')}</td><td>${unblocked.join('<br>')}</td></tr>`;
+        }
+    </script>
+</body>
+</html>
+
