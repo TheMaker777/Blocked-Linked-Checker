@@ -4,6 +4,61 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Website Search Tool</title>
+    <style>
+    body {
+    font-family: 'Times New Roman', serif;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background: black;
+    animation: backgroundAnimation 10s infinite;
+}
+
+@keyframes backgroundAnimation {
+    0% { background-color: black; }
+    50% { background-color: darkgray; }
+    100% { background-color: black; }
+}
+
+h1 {
+    color: white;
+    text-align: center;
+    margin-top: 50px;
+}
+
+input[type="text"] {
+    width: 400px;
+    height: 40px;
+    font-size: 18px;
+    padding: 10px;
+    border: 2px solid white;
+    border-radius: 5px;
+    display: block;
+    margin: 20px auto;
+}
+
+button {
+    background-color: white;
+    color: black;
+    font-size: 18px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    display: block;
+    margin: 0 auto;
+}
+
+button:hover {
+    background-color: gray;
+}
+
+#results {
+    color: white;
+    text-align: center;
+    margin-top: 20px;
+}
+    </style>
     <script>
         async function checkWebsites() {
             const input = document.getElementById('websites').value;
