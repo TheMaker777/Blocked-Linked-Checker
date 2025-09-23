@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Website Search Tool</title>
+    <script>
+        async function searchWebsites() {
+            const websites = document.getElementById('websites').value.split(' ');
+            const results = document.getElementById('results');
+            results.innerHTML = '';
+
+            for (const website of websites) {
+                try {
+                    const response = await fetch(website);
+                    const text = await response.text();
+                    if (text.includes('<input type="Hidden" name="CAT" value="Nebo-Block-All (Custom)">')) {
+                        results.innerHTML += `<p>Term found in: ${website}</p>`;
+                    } else {
+                        results.innerHTML += `<p>Term not found in: ${website}</p>`;
+                    }
+                } catch (error) {
+                    results.innerHTML += `<p>Error accessing: ${website}</p>`;
+                }
+            }
+        }
+    </script>
+</head>
+<body>
+    <h1>Website Search Tool</h1>
+    <input type="text" id="websites" placeholder="Enter websites separated by space">
+    <button onclick="searchWebsites()">Search</button>
+    <div id="results"></div>
+</body>
+</html>
