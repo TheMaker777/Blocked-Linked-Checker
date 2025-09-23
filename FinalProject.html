@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Website Search</title>
+    <style>
+        body { 
+            font-family: 'Times New Roman', serif; 
+            background: linear-gradient(45deg, #f3ec78, #af4261); 
+            animation: gradient 5s ease infinite; 
+            color: #333; 
+        }
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; }
+        input[type="text"] {
+            width: 300px; 
+            padding: 10px; 
+            font-size: 16px; 
+            margin-right: 10px; 
+        }
+    </style>
+</head>
+<body>
+    <h1>Website Search Tool</h1>
+     <p>If there are error messages, toggle the add Https:// checkbox. This happens commenly with links like www.google.com.</p>
+    <input type="text" id="websites" placeholder="Enter websites separated by space">
+    <label>
+        <input type="checkbox" id="addHttps"> Add https://
+    </label>
+    <button onclick="checkWebsites()">Search</button>
+    
+    <div id="error" style="color: red;"></div>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>Blocked</th>
+                <th>Unblocked</th>
+            </tr>
+        </thead>
+        <tbody id="results">
+        </tbody>
+    </table>
+
+    <script>
+        async function checkWebsites() {
+            const input = document.getElementById('websites').value;
+            const addHttps = document.getElementById('addHttps').checked;
+            const websites = input.split(' ').map(url => url.trim());
+            const blocked = [];
+            const unblocked = [];
+            const errors = [];
+
+            for (const website of websites) {
+                let url = website;
+                if (addHttps && !url.startsWith('https://')) {
+                    url = 'https://' + url;
+                }
+                try {
+                    const response = await fetch(url);
+                    const text = await response.text();
+                    if (text.includes('<input type="Hidden" name="CAT"')) {
+                        blocked.push(website);
+                    } else {
+                        unblocked.push(website);
+                    }
+                } catch (error) {
+                    errors.push(website);
+                }
+            }
+
+            document.getElementById('results').innerHTML = '';
+            blocked.forEach(site => {
+                document.getElementById('results').innerHTML += `<tr><td>${site}</td><td></td></tr>`;
+            });
+            unblocked.forEach(site => {
+                document.getElementById('results').innerHTML += `<tr><td></td><td>${site}</td></tr>`;
+            });
+            document.getElementById('error').innerHTML = errors.length > 0 ? 'Errors: ' + errors.join(', ') : '';
+        }
+    </script>
+</body>
+</html>
+
