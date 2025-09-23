@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Website Search</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h1>Website Search Tool</h1>
+    <input type="text" id="websites" placeholder="Enter websites separated by space">
+    <button onclick="checkWebsites()">Search</button>
+    <div id="error" style="color: red; font-size: smaller;"></div>
+    <table>
+        <thead>
+            <tr>
+                <th>Blocked</th>
+                <th>Unblocked</th>
+            </tr>
+        </thead>
+        <tbody id="results">
+        </tbody>
+    </table>
+
+    <script>
+        async function checkWebsites() {
+            const input = document.getElementById('websites').value;
+            const websites = input.split(' ').map(url => url.startsWith('http') ? url : 'https://' + url);
+            const blocked = [];
+            const unblocked = [];
+            const errorDiv = document.getElementById('error');
+            errorDiv.innerHTML = '';
+
+            for (const website of websites) {
+                try {
+                    const response = await fetch(website);
+                    const text = await response.text();
+                    if (text.includes('<input type="Hidden" name="CAT"')) {
+                        blocked.push(website);
+                    } else {
+                        unblocked.push(website);
+                    }
+                } catch (error) {
+                    errorDiv.innerHTML += `Error with ${website}: ${error.message}<br>`;
+                }
+            }
+
+            const results = document.getElementById('results');
+            results.innerHTML = '';
+            results.innerHTML += `<tr><td>${blocked.join('<br>')}</td><td>${unblocked.join('<br>')}</td></tr>`;
+        }
+    </script>
+</body>
+</html>
