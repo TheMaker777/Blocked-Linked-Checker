@@ -3,34 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Website Search</title>
+    <title>Blocked Website Search</title>
     <style>
         body { 
             font-family: 'Times New Roman', serif; 
-            background: linear-gradient(45deg, #f3ec78, #af4261); 
-            animation: gradient 5s ease infinite; 
-            color: #333; 
+            background: linear-gradient(45deg, black, darkblue); 
+            color: white; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center; 
+            height: 100vh; 
+            text-align: center; 
         }
-        @keyframes gradient {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+        table { 
+            width: 100%; 
+            border-collapse: collapse; 
+            margin-top: 20px; 
+            text-align: center; 
+            background-color: white; 
         }
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
-        th { background-color: #f2f2f2; }
+        th, td { 
+            border: 1px solid #ddd; 
+            padding: 8px; 
+            color: black; 
+        }
+        th { 
+            background-color: #f2f2f2; 
+        }
         input[type="text"] {
             width: 300px; 
             padding: 10px; 
             font-size: 16px; 
             margin-right: 10px; 
+            text-align: center; 
         }
     </style>
 </head>
 <body>
-    <h1>Website Search Tool</h1>
-     <p>If there are error messages, toggle the add Https:// checkbox. This happens commenly with links like www.google.com.</p>
-    <input type="text" id="websites" placeholder="Enter websites separated by space">
+    <h1>Is this Website Blocked?</h1>
+    <p>Put links in below to find out!</p>
+    <p>If you would like to insert multiple websites at once separate them with a space.</p>
+    <p> If there are error messages, toggle the add https:// checkbox. If that does not work then the link is most likely broken and no longer being hosted.</p>
+    <input type="text" id="websites" placeholder="Enter websites here">
     <label>
         <input type="checkbox" id="addHttps"> Add https://
     </label>
@@ -48,6 +63,8 @@
         <tbody id="results">
         </tbody>
     </table>
+
+        <p><b>Disclaimer:</b> I, TheMaker777 (Mack), am not responsible for any harm that may come your way throught this site. This is for Nebo school district only. Please use responsibly!</p>
 
     <script>
         async function checkWebsites() {
